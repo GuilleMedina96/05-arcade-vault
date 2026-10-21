@@ -21,6 +21,11 @@ No test runner is configured.
 
 This uses Next.js 16.4.2 / React 19.3 with breaking changes versus common training data. Per `AGENTS.md`, read the relevant guide in `node_modules/next/dist/docs/` (`01-app`, `02-pages`, `03-architecture`, `04-community`; start at `index.md`) before writing Next.js code, and heed deprecation notices. `AGENTS.md` is re-added by `next dev`; leave it in place.
 
+## Skills
+
+usa siempre /frontend-desing para diseñar la interfaz de usuario.
+
+
 ## Architecture notes
 
 - App Router only (`app/`). Path alias `@/*` maps to the repo root (not `src/`).
