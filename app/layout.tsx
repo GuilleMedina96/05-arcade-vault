@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Courier_Prime, JetBrains_Mono, Press_Start_2P } from "next/font/google";
+import { Footer } from "@/components/footer";
+import { Nav } from "@/components/nav";
+import { SessionProvider } from "@/components/session-provider";
 import "./globals.css";
 
 const pressStart2P = Press_Start_2P({
@@ -21,7 +24,7 @@ const courierPrime = Courier_Prime({
 });
 
 export const metadata: Metadata = {
-  title: "Arcade Vault",
+  title: { default: "Arcade Vault", template: "%s · Arcade Vault" },
   description: "Juega online y compite por la puntuación más alta.",
 };
 
@@ -34,7 +37,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <div className="av-bg" />
         <div className="av-noise" />
-        <div id="root">{children}</div>
+        <div id="root">
+          <SessionProvider>
+            <Nav />
+            <main className="av-main">{children}</main>
+            <Footer />
+          </SessionProvider>
+        </div>
       </body>
     </html>
   );
