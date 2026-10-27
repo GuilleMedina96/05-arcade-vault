@@ -12,8 +12,6 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Prototipo SPA de referencia (React UMD), no es código de la app.
-    "references/**",
   ]),
 ]);
 
