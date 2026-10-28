@@ -1,6 +1,6 @@
 # SPEC 03 — Envío real del formulario de contacto con Resend
 
-> **Estado:** aprobado
+> **Estado:** implementado
 > **Depende de:** SPEC 02 (`app/acerca-de/page.tsx` y `components/contact-form.tsx`)
 > **Fecha:** 2026-10-27
 > **Objetivo:** Reemplazar el envío simulado del formulario de `/acerca-de` por un envío real de correo con Resend mediante una Server Action, manteniendo el diseño del template `home-about`.
@@ -92,21 +92,21 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` la guía `01-app/01-get
 
 ## Criterios de aceptación
 
-- [ ] `npx eslint app components` y `npm run build` terminan sin errores.
-- [ ] `package.json` incluye `resend` y `.env.example` está versionado con las 3 variables vacías.
-- [ ] `.env.local` no aparece en `git status` y ningún archivo versionado contiene una clave `re_`.
+- [x] `npx eslint app components` y `npm run build` terminan sin errores.
+- [x] `package.json` incluye `resend` y `.env.example` está versionado con las 3 variables vacías.
+- [x] `.env.local` no aparece en `git status` y ningún archivo versionado contiene una clave `re_`.
 - [ ] Enviar el formulario con `px_kai`, un correo válido y un mensaje hace llegar un correo a `CONTACT_TO_EMAIL` con asunto `[Arcade Vault] Mensaje de px_kai`.
 - [ ] Responder a ese correo escribe a la dirección que el usuario puso en el formulario (`replyTo`).
-- [ ] Tras el envío correcto se muestra la terminal con "GRACIAS, PX_KAI." y "ENVIAR OTRO MENSAJE" devuelve el formulario con los campos vacíos.
-- [ ] Enviar con algún campo vacío no llama a Resend, no muestra la terminal y aplica la clase `shake` durante 400 ms.
-- [ ] Una petición a la acción con correo sin formato válido, o con `msg` de más de 2000 caracteres, devuelve `{ ok: false, error: "invalid" }` sin llamar a Resend.
-- [ ] Una petición con el campo `website` relleno devuelve `{ ok: true }` y no se envía ningún correo.
-- [ ] Durante el envío el botón está deshabilitado y muestra "▶ ENVIANDO…".
-- [ ] Con `RESEND_API_KEY` ausente o inválida se muestra el mensaje de error del formulario, no la terminal de éxito, y los campos conservan lo escrito.
-- [ ] `RESEND_API_KEY` no aparece en el JavaScript enviado al navegador.
-- [ ] El campo `website` no es visible en pantalla ni alcanzable con Tab.
-- [ ] La consola del navegador no muestra errores ni warnings de hidratación en `/acerca-de`.
-- [ ] El diseño de `/acerca-de` es idéntico al anterior salvo el estado de error y el texto del botón mientras se envía.
+- [x] Tras el envío correcto se muestra la terminal con "GRACIAS, PX_KAI." y "ENVIAR OTRO MENSAJE" devuelve el formulario con los campos vacíos.
+- [x] Enviar con algún campo vacío no llama a Resend, no muestra la terminal y aplica la clase `shake` durante 400 ms.
+- [x] Una petición a la acción con correo sin formato válido, o con `msg` de más de 2000 caracteres, devuelve `{ ok: false, error: "invalid" }` sin llamar a Resend.
+- [x] Una petición con el campo `website` relleno devuelve `{ ok: true }` y no se envía ningún correo.
+- [x] Durante el envío el botón está deshabilitado y muestra "▶ ENVIANDO…".
+- [x] Con `RESEND_API_KEY` ausente o inválida se muestra el mensaje de error del formulario, no la terminal de éxito, y los campos conservan lo escrito.
+- [x] `RESEND_API_KEY` no aparece en el JavaScript enviado al navegador.
+- [x] El campo `website` no es visible en pantalla ni alcanzable con Tab.
+- [x] La consola del navegador no muestra errores ni warnings de hidratación en `/acerca-de`.
+- [x] El diseño de `/acerca-de` es idéntico al anterior salvo el estado de error y el texto del botón mientras se envía.
 
 ---
 
