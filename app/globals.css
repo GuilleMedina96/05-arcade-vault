@@ -1173,6 +1173,27 @@ a { color: inherit; text-decoration: none; }
 .contact-form textarea:focus { border-color: var(--cyan); box-shadow: 0 0 12px rgba(0,245,255,0.35); }
 .contact-form textarea::placeholder, .contact-form input::placeholder { color: var(--ink-faint); }
 
+/* error de envío: mismo LED magenta que .tip-led.m, en una línea de consola */
+.form-error {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin: 0 0 14px; padding: 10px 12px;
+  background: rgba(255,0,110,0.07);
+  border: 1px solid var(--magenta);
+  box-shadow: 0 0 12px rgba(255,0,110,0.28), inset 0 0 8px rgba(255,0,110,0.12);
+  font-family: var(--mono); font-size: 12px; line-height: 1.5; color: var(--magenta);
+  animation: fadeIn 180ms ease-out;
+}
+.form-error::before {
+  content: ""; flex: none; width: 8px; height: 8px; margin-top: 5px;
+  border-radius: 50%; background: var(--magenta); box-shadow: 0 0 6px var(--magenta);
+}
+
+/* honeypot: fuera de pantalla, sin display:none para que los bots lo vean */
+.hp-field {
+  position: absolute; left: -9999px; top: auto;
+  width: 1px; height: 1px; overflow: hidden;
+}
+
 .btn.press:active { transform: translateY(3px) scale(0.99); box-shadow: 0 0 6px rgba(0,245,255,0.2) inset; }
 
 .terminal-success { background: #000; border: 1px solid var(--green); box-shadow: 0 0 22px rgba(0,255,136,0.25); font-family: var(--mono); overflow: hidden; }

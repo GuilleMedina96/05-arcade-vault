@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { sendContactMessage } from "@/app/acerca-de/actions";
 
 const EMPTY = { name: "", email: "", msg: "" };
 
@@ -8,15 +9,35 @@ export function ContactForm() {
   const [form, setForm] = useState(EMPTY);
   const [sent, setSent] = useState<string | null>(null);
   const [shake, setShake] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 400);
+  };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
     if (!form.name.trim() || !form.email.trim() || !form.msg.trim()) {
-      setShake(true);
-      setTimeout(() => setShake(false), 400);
+      triggerShake();
       return;
     }
-    setSent(form.name.trim());
+    const data = new FormData(e.currentTarget);
+    startTransition(async () => {
+      const result = await sendContactMessage(data);
+      if (result.ok) {
+        setSent(result.name);
+        return;
+      }
+      if (result.error === "invalid") {
+        triggerShake();
+        setError("Revisa el correo y el mensaje (máximo 2000 caracteres) y vuelve a enviarlo.");
+      } else {
+        setError("No se pudo enviar el mensaje. Tu texto sigue aquí: inténtalo de nuevo en unos minutos.");
+      }
+    });
   };
 
   return (
@@ -27,6 +48,7 @@ export function ContactForm() {
             <label htmlFor="c-name">NOMBRE</label>
             <input
               id="c-name"
+              name="name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="px_kai"
@@ -36,6 +58,7 @@ export function ContactForm() {
             <label htmlFor="c-email">CORREO ELECTRÓNICO</label>
             <input
               id="c-email"
+              name="email"
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -46,14 +69,36 @@ export function ContactForm() {
             <label htmlFor="c-msg">MENSAJE</label>
             <textarea
               id="c-msg"
+              name="msg"
               rows={5}
               value={form.msg}
               onChange={(e) => setForm({ ...form, msg: e.target.value })}
               placeholder="Cuéntanos qué tienes en mente…"
             ></textarea>
           </div>
-          <button className="btn xl press" type="submit" style={{ width: "100%" }}>
-            ▶ ENVIAR MENSAJE
+          <div className="hp-field" aria-hidden="true">
+            <label htmlFor="c-website">WEBSITE</label>
+            <input
+              id="c-website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              defaultValue=""
+            />
+          </div>
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
+          <button
+            className="btn xl press"
+            type="submit"
+            style={{ width: "100%" }}
+            disabled={pending}
+          >
+            {pending ? "▶ ENVIANDO…" : "▶ ENVIAR MENSAJE"}
           </button>
         </>
       ) : (
@@ -81,6 +126,7 @@ export function ContactForm() {
                 type="button"
                 onClick={() => {
                   setSent(null);
+                  setError(null);
                   setForm(EMPTY);
                 }}
               >
