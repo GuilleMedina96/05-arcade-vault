@@ -1,6 +1,6 @@
 # SPEC 05 — Juego Asteroids en `/juegos/asteroids`
 
-> **Estado:** Borrador
+> **Estado:** Aprobada
 > **Depende de:** SPEC 02 (layout con `Nav` y `Footer`, tarjeta "ROCAS" del Inicio y clases `.crt` de `app/globals.css`)
 > **Fecha:** 2026-11-11
 > **Objetivo:** Portar a TypeScript el juego Asteroids de `references/resources/started-games/02-asteroids/` y jugarlo en la ruta `/juegos/asteroids`, dentro de un marco CRT, con el mismo gameplay y sin guardar puntuaciones.
