@@ -1,6 +1,6 @@
 # SPEC 04 — Integración de Supabase (clientes y sesión)
 
-> **Estado:** Aprobada
+> **Estado:** Implementada
 > **Depende de:** SPEC 03 (convención de `.env.example` y `.gitignore` para variables de entorno)
 > **Fecha:** 2026-11-11
 > **Objetivo:** Conectar la app Next.js con el proyecto de Supabase mediante clientes de servidor y navegador y un proxy que refresca la sesión, sin crear tablas ni esquemas y sin añadir ninguna pantalla.
@@ -93,16 +93,16 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` la referencia de `03-ap
 
 ## Criterios de aceptación
 
-- [ ] `npx eslint app components lib`, `npx tsc --noEmit` y `npm run build` terminan sin errores.
-- [ ] `package.json` incluye `@supabase/supabase-js` y `@supabase/ssr`.
-- [ ] `.env.example` lista `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` vacías, y `.env.local` no aparece en `git status`.
-- [ ] Ningún archivo versionado contiene una clave `sb_publishable_` ni `service_role`.
-- [ ] `proxy.ts` existe en la raíz y no existe ningún `middleware.ts`.
-- [ ] `GET /api/health` devuelve `200` con `{"ok":true}` con la configuración correcta.
-- [ ] Con `NEXT_PUBLIC_SUPABASE_URL` apuntando a un host inválido, `GET /api/health` devuelve `503` con `{"ok":false}` y el cuerpo no contiene el mensaje de error.
-- [ ] No existe la carpeta `supabase/migrations/` y `list_tables` sigue mostrando 0 tablas.
+- [x] `npx eslint app components lib`, `npx tsc --noEmit` y `npm run build` terminan sin errores.
+- [x] `package.json` incluye `@supabase/supabase-js` y `@supabase/ssr`.
+- [x] `.env.example` lista `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` vacías, y `.env.local` no aparece en `git status`.
+- [x] Ningún archivo versionado contiene una clave `sb_publishable_` ni `service_role`.
+- [x] `proxy.ts` existe en la raíz y no existe ningún `middleware.ts`.
+- [x] `GET /api/health` devuelve `200` con `{"ok":true}` con la configuración correcta.
+- [x] Con `NEXT_PUBLIC_SUPABASE_URL` apuntando a un host inválido, `GET /api/health` devuelve `503` con `{"ok":false}` y el cuerpo no contiene el mensaje de error.
+- [x] No existe la carpeta `supabase/migrations/` y `list_tables` sigue mostrando 0 tablas.
 - [ ] En el panel de Supabase (Authentication → Providers → Email), el proveedor está activo y "Confirm email" está desactivado.
-- [ ] `/` y `/acerca-de` se ven y se comportan igual que antes, y la consola del navegador no muestra errores ni warnings de hidratación.
+- [x] `/` y `/acerca-de` se ven y se comportan igual que antes, y la consola del navegador no muestra errores ni warnings de hidratación.
 
 ---
 
