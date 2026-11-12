@@ -13,7 +13,7 @@ const CONTROLS = [
 
 export default function AsteroidsPage() {
   return (
-    <div className="av-player fade-in">
+    <div className="av-player game-page fade-in">
       <header className="game-head">
         <h1 className="pixel neon-cyan">Asteroids</h1>
         <p>

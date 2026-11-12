@@ -11,19 +11,44 @@ export const metadata: Metadata = {
 type Accent = "cyan" | "magenta" | "yellow" | "green";
 
 const FEATURES: { i: FeatureKind; t: string; d: string; c: Accent }[] = [
-  { i: "GAMEPAD", t: "JUEGOS CLÁSICOS", d: "Arkanoid, Tetris, Snake y muchos más. Los mejores arcades de todos los tiempos en un solo lugar.", c: "cyan" },
-  { i: "FREE", t: "100% GRATIS", d: "Sin suscripciones, sin pagos ocultos. Todos los juegos disponibles de forma gratuita.", c: "yellow" },
-  { i: "TROPHY", t: "LADDER BOARDS", d: "Compite con jugadores de todo el mundo. Escala el ranking y demuestra quién es el mejor.", c: "magenta" },
-  { i: "ROCKET", t: "SIEMPRE CRECIENDO", d: "Agregamos nuevos juegos constantemente. Vuelve seguido, siempre habrá algo nuevo que jugar.", c: "green" },
+  {
+    i: "GAMEPAD",
+    t: "JUEGOS CLÁSICOS",
+    d: "Arkanoid, Tetris, Snake y muchos más. Los mejores arcades de todos los tiempos en un solo lugar.",
+    c: "cyan",
+  },
+  {
+    i: "FREE",
+    t: "100% GRATIS",
+    d: "Sin suscripciones, sin pagos ocultos. Todos los juegos disponibles de forma gratuita.",
+    c: "yellow",
+  },
+  {
+    i: "TROPHY",
+    t: "LADDER BOARDS",
+    d: "Compite con jugadores de todo el mundo. Escala el ranking y demuestra quién es el mejor.",
+    c: "magenta",
+  },
+  {
+    i: "ROCKET",
+    t: "SIEMPRE CRECIENDO",
+    d: "Agregamos nuevos juegos constantemente. Vuelve seguido, siempre habrá algo nuevo que jugar.",
+    c: "green",
+  },
 ];
 
-const GAMES = [
+const GAMES: { title: string; cat: string; cover: string; href?: string }[] = [
   { title: "BLOQUE BUSTER", cat: "ARCADE", cover: "cover-bricks" },
   { title: "CAÍDA", cat: "PUZZLE", cover: "cover-tetro" },
   { title: "SERPENTINA", cat: "ARCADE", cover: "cover-snake" },
   { title: "GLOTÓN", cat: "ARCADE", cover: "cover-glot" },
   { title: "INVASORES", cat: "SHOOTER", cover: "cover-invaders" },
-  { title: "ROCAS", cat: "SHOOTER", cover: "cover-rocas" },
+  {
+    title: "ROCAS",
+    cat: "SHOOTER",
+    cover: "cover-rocas",
+    href: "/juegos/asteroids",
+  },
 ];
 
 const STATS = [
@@ -60,14 +85,31 @@ const PRICE_ITEMS = [
 ];
 
 const FAQ = [
-  { q: "¿REALMENTE ES GRATIS?", a: 'Sí. Arcade Vault es un proyecto sin fines de lucro hecho por amor a los clásicos. No hay versión "premium" escondida.' },
-  { q: "¿NECESITO CREAR CUENTA?", a: "No. Puedes jugar como invitado. Si quieres guardar tu puntuación y aparecer en el ranking, regístrate en 10 segundos." },
-  { q: "¿CÓMO SOBREVIVEN SIN COBRAR?", a: "Es un proyecto comunitario. Si te gusta, compártelo. Esa es toda la moneda que aceptamos." },
+  {
+    q: "¿REALMENTE ES GRATIS?",
+    a: 'Sí. Arcade Vault es un proyecto sin fines de lucro hecho por amor a los clásicos. No hay versión "premium" escondida.',
+  },
+  {
+    q: "¿NECESITO CREAR CUENTA?",
+    a: "No. Puedes jugar como invitado. Si quieres guardar tu puntuación y aparecer en el ranking, regístrate en 10 segundos.",
+  },
+  {
+    q: "¿CÓMO SOBREVIVEN SIN COBRAR?",
+    a: "Es un proyecto comunitario. Si te gusta, compártelo. Esa es toda la moneda que aceptamos.",
+  },
 ];
 
 const fmt = (n: number) => n.toLocaleString("es-ES");
 
-function SectionHead({ n, color, title }: { n: string; color: Accent; title: string }) {
+function SectionHead({
+  n,
+  color,
+  title,
+}: {
+  n: string;
+  color: Accent;
+  title: string;
+}) {
   return (
     <div className="section-head">
       <div className={`kicker pixel neon-${color}`}>{`// ${n}`}</div>
@@ -100,8 +142,12 @@ export default function HomePage() {
             Sin descargas. Sin costo. Solo diversión.
           </p>
           <div className="home-ctas">
-            <Link href="/biblioteca" className="btn xl pulse">▶ EXPLORAR JUEGOS</Link>
-            <Link href="/auth" className="btn xl magenta">✦ CREAR CUENTA</Link>
+            <Link href="/biblioteca" className="btn xl pulse">
+              ▶ EXPLORAR JUEGOS
+            </Link>
+            <Link href="/auth" className="btn xl magenta">
+              ✦ CREAR CUENTA
+            </Link>
           </div>
           <div className="hero-scroll" aria-hidden="true">
             <span>DESLIZA</span>
@@ -115,7 +161,11 @@ export default function HomePage() {
         <SectionHead n="01" color="magenta" title="¿POR QUÉ ARCADE VAULT?" />
         <div className="feature-grid">
           {FEATURES.map((f, i) => (
-            <div key={f.t} className={"feature-card " + f.c} style={{ transitionDelay: i * 80 + "ms" }}>
+            <div
+              key={f.t}
+              className={"feature-card " + f.c}
+              style={{ transitionDelay: i * 80 + "ms" }}
+            >
               <FeatureIcon kind={f.i} />
               <div className="ft-title pixel">{f.t}</div>
               <div className="ft-desc">{f.d}</div>
@@ -129,7 +179,11 @@ export default function HomePage() {
         <SectionHead n="02" color="cyan" title="JUEGOS DISPONIBLES AHORA" />
         <div className="mini-rail">
           {GAMES.map((g) => (
-            <Link key={g.title} href="/biblioteca" className="mini-card">
+            <Link
+              key={g.title}
+              href={g.href ?? "/biblioteca"}
+              className="mini-card"
+            >
               <div className="mini-cover">
                 <div className={"cover-bg " + g.cover}></div>
               </div>
@@ -141,7 +195,9 @@ export default function HomePage() {
           ))}
         </div>
         <div style={{ textAlign: "center", marginTop: 24 }}>
-          <Link href="/biblioteca" className="btn lg">VER TODOS LOS JUEGOS →</Link>
+          <Link href="/biblioteca" className="btn lg">
+            VER TODOS LOS JUEGOS →
+          </Link>
         </div>
       </section>
 
@@ -149,7 +205,11 @@ export default function HomePage() {
       <section className="home-stats reveal">
         <div className="stats-inner">
           {STATS.map((st, i) => (
-            <div key={st.u} className="stat-block" style={{ transitionDelay: i * 90 + "ms" }}>
+            <div
+              key={st.u}
+              className="stat-block"
+              style={{ transitionDelay: i * 90 + "ms" }}
+            >
               <div className="stat-n neon-yellow">{st.n}</div>
               <div className="stat-u pixel">{st.u}</div>
               <div className="stat-s">{st.s}</div>
@@ -168,7 +228,11 @@ export default function HomePage() {
             </div>
             <div className="ticker">
               {LATEST.map((r, i) => (
-                <div key={r.p} className="tick-row" style={{ animationDelay: i * 60 + "ms" }}>
+                <div
+                  key={r.p}
+                  className="tick-row"
+                  style={{ animationDelay: i * 60 + "ms" }}
+                >
                   <span className={"tk-p neon-" + r.c}>{r.p}</span>
                   <span className="tk-mid">▸ {r.g}</span>
                   <span className="tk-s">+{fmt(r.s)}</span>
@@ -180,15 +244,25 @@ export default function HomePage() {
 
           <div className="activity-card">
             <div className="ac-head">
-              <div className="ac-title pixel neon-magenta">▸ TOP JUGADORES · HOY</div>
-              <Link href="/salon" className="lb-link">VER SALÓN →</Link>
+              <div className="ac-title pixel neon-magenta">
+                ▸ TOP JUGADORES · HOY
+              </div>
+              <Link href="/salon" className="lb-link">
+                VER SALÓN →
+              </Link>
             </div>
             <div className="top-list">
               {TOP.map((r, i) => (
-                <div key={r.p} className={"top-row" + (i < 3 ? ` top${i + 1}` : "")}>
+                <div
+                  key={r.p}
+                  className={"top-row" + (i < 3 ? ` top${i + 1}` : "")}
+                >
                   <span className="tp-rk">#{String(r.r).padStart(2, "0")}</span>
                   <span className="tp-bar">
-                    <span className="tp-fill" style={{ width: 100 - i * 16 + "%" }}></span>
+                    <span
+                      className="tp-fill"
+                      style={{ width: 100 - i * 16 + "%" }}
+                    ></span>
                   </span>
                   <span className="tp-p">{r.p}</span>
                   <span className="tp-s">{fmt(r.s)}</span>
@@ -216,7 +290,13 @@ export default function HomePage() {
                 <li key={it}>✔ {it}</li>
               ))}
             </ul>
-            <Link href="/auth" className="btn xl pulse" style={{ width: "100%" }}>EMPEZAR GRATIS →</Link>
+            <Link
+              href="/auth"
+              className="btn xl pulse"
+              style={{ width: "100%" }}
+            >
+              EMPEZAR GRATIS →
+            </Link>
             <div className="pc-foot">No pedimos tarjeta. Nunca lo haremos.</div>
             <div className="pc-stamp pixel">
               FREE
@@ -239,8 +319,12 @@ export default function HomePage() {
       {/* CTA FINAL */}
       <section className="home-final reveal">
         <h2 className="final-title pixel">¿LISTO PARA JUGAR?</h2>
-        <Link href="/biblioteca" className="btn xl pulse final-cta">INSERTAR MONEDA →</Link>
-        <div className="final-tag">Gratis. Sin registro obligatorio. Empieza en segundos.</div>
+        <Link href="/biblioteca" className="btn xl pulse final-cta">
+          INSERTAR MONEDA →
+        </Link>
+        <div className="final-tag">
+          Gratis. Sin registro obligatorio. Empieza en segundos.
+        </div>
       </section>
     </div>
   );
