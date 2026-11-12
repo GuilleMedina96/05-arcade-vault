@@ -3093,3 +3093,67 @@ a {
 .blink {
   animation: blink 1.2s steps(1, end) infinite;
 }
+/* ===== ASTEROIDS PAGE ===== */
+.game-head {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.game-head h1 {
+  margin: 0;
+  font-size: clamp(24px, 4.5vw, 44px);
+  letter-spacing: 0.08em;
+}
+
+.game-head p {
+  margin: 12px auto 0;
+  max-width: 52ch;
+  color: var(--ink-dim);
+}
+
+.asteroids-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.game-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 40px;
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+}
+
+.game-controls li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-controls .keys {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.keycap {
+  min-width: 36px;
+  padding: 8px 10px;
+  font-family: var(--pixel);
+  font-size: 10px;
+  line-height: 1;
+  text-align: center;
+  color: var(--cyan);
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-bottom-width: 3px;
+  border-radius: 4px;
+}
+
+.control-label {
+  color: var(--ink-dim);
+}
