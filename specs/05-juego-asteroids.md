@@ -104,24 +104,24 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` la guía de Client Comp
 
 ## Criterios de aceptación
 
-- [ ] `npx eslint app components lib`, `npx tsc --noEmit` y `npm run build` terminan sin errores.
-- [ ] El build lista `/juegos/asteroids` como ruta estática.
-- [ ] `/juegos/asteroids` muestra el juego dentro de un marco `.crt`, con el título de pestaña "Asteroids · Arcade Vault".
-- [ ] Al cargar hay 4 asteroides grandes, 3 vidas en el HUD, "SCORE 0" y "NIVEL 1", y la nave parpadea durante 3 s.
-- [ ] ← y → rotan la nave, ↑ la propulsa con llama visible y Espacio dispara con un intervalo mínimo de 0,2 s entre disparos.
-- [ ] Destruir un asteroide grande suma 20 puntos, uno mediano 50 y uno pequeño 100. Los grandes se parten en 2 medianos, los medianos en 2 pequeños y los pequeños desaparecen.
-- [ ] Al chocar con un asteroide sin estar invencible se pierde una vida, la nave reaparece a los 2 s en el centro y no se puede disparar mientras tanto.
-- [ ] Al destruir todos los asteroides pasa a "NIVEL 2" con 5 asteroides grandes y la nave en el centro.
-- [ ] Recoger el cuadrado cian "3x" activa el disparo triple 5 s y el HUD muestra la cuenta atrás.
-- [ ] Al perder la última vida aparece "GAME OVER" con la puntuación, y Espacio reinicia a 0 puntos, 3 vidas y nivel 1.
-- [ ] Nave, balas, asteroides y power-ups reaparecen por el borde opuesto al salir del canvas.
-- [ ] Espacio y las flechas no desplazan la página mientras el juego está en pantalla.
-- [ ] Navegar fuera de `/juegos/asteroids` y volver no duplica la velocidad del juego ni dispara varias balas por pulsación.
-- [ ] Mantener una tecla pulsada y cambiar de pestaña o ventana no deja la nave girando o propulsando al volver.
-- [ ] A 375 px de ancho no hay scroll horizontal y el canvas conserva la proporción 4:3.
-- [ ] Pulsar la tarjeta "ROCAS" en `/` lleva a `/juegos/asteroids`.
-- [ ] La consola del navegador no muestra errores ni warnings de hidratación en `/juegos/asteroids` ni en `/`.
-- [ ] No se escribe nada en `localStorage` ni se hace ninguna llamada a Supabase desde la ruta.
+- [x] `npx eslint app components lib`, `npx tsc --noEmit` y `npm run build` terminan sin errores.
+- [x] El build lista `/juegos/asteroids` como ruta estática.
+- [x] `/juegos/asteroids` muestra el juego dentro de un marco `.crt`, con el título de pestaña "Asteroids · Arcade Vault".
+- [x] Al cargar hay 4 asteroides grandes, 3 vidas en el HUD, "SCORE 0" y "NIVEL 1", y la nave parpadea durante 3 s.
+- [x] ← y → rotan la nave, ↑ la propulsa con llama visible y Espacio dispara con un intervalo mínimo de 0,2 s entre disparos.
+- [x] Destruir un asteroide grande suma 20 puntos, uno mediano 50 y uno pequeño 100. Los grandes se parten en 2 medianos, los medianos en 2 pequeños y los pequeños desaparecen.
+- [x] Al chocar con un asteroide sin estar invencible se pierde una vida, la nave reaparece a los 2 s en el centro y no se puede disparar mientras tanto.
+- [x] Al destruir todos los asteroides pasa a "NIVEL 2" con 5 asteroides grandes y la nave en el centro.
+- [x] Recoger el cuadrado cian "3x" activa el disparo triple 5 s y el HUD muestra la cuenta atrás.
+- [x] Al perder la última vida aparece "GAME OVER" con la puntuación, y Espacio reinicia a 0 puntos, 3 vidas y nivel 1.
+- [x] Nave, balas, asteroides y power-ups reaparecen por el borde opuesto al salir del canvas.
+- [x] Espacio y las flechas no desplazan la página mientras el juego está en pantalla.
+- [x] Navegar fuera de `/juegos/asteroids` y volver no duplica la velocidad del juego ni dispara varias balas por pulsación.
+- [x] Mantener una tecla pulsada y cambiar de pestaña o ventana no deja la nave girando o propulsando al volver.
+- [x] A 375 px de ancho no hay scroll horizontal y el canvas conserva la proporción 4:3.
+- [x] Pulsar la tarjeta "ROCAS" en `/` lleva a `/juegos/asteroids`.
+- [x] La consola del navegador no muestra errores ni warnings de hidratación en `/juegos/asteroids` ni en `/`.
+- [x] No se escribe nada en `localStorage` ni se hace ninguna llamada a Supabase desde la ruta.
 
 ---
 
