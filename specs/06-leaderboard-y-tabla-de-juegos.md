@@ -1,6 +1,6 @@
 # SPEC 06 — Leaderboard y tabla de juegos
 
-> **Estado:** Aprobado
+> **Estado:** Implementada
 > **Depende de:** SPEC 04 (clientes de Supabase y variables de entorno), SPEC 05 (juego Asteroids y su motor), SPEC 02 (`Nav` y Inicio)
 > **Fecha:** 2026-11-12
 > **Objetivo:** Crear en Supabase las tablas `games` y `scores`, permitir enviar la puntuación con un alias al terminar una partida de Asteroids y mostrar el ranking en `/ranking` y en un panel junto al juego.
@@ -126,26 +126,26 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Server Ac
 ## Criterios de aceptación
 
 - [ ] `npx eslint app components lib`, `npx tsc --noEmit`, `npx prettier --check .` y `npm run build` terminan sin errores.
-- [ ] Existe `supabase/migrations/20261112000000_games_and_scores.sql` y `list_tables` muestra `games` y `scores` con RLS activo.
-- [ ] `games` contiene exactamente una fila con `slug = 'asteroids'`.
-- [ ] Con la clave publicable, un `insert` en `scores` con alias de 2 caracteres, alias con espacios, `score` negativo o `score` mayor que 1 000 000 es rechazado por la base.
-- [ ] Con la clave publicable, un `update` o `delete` en `scores` y cualquier `insert` en `games` son rechazados.
-- [ ] Al llegar a GAME OVER aparece el formulario con el último alias guardado en `arcade-vault:alias:v1` (vacío la primera vez).
-- [ ] Escribir un alias con espacios o más de 12 caracteres muestra un error y no inserta nada.
-- [ ] Escribir en el campo del alias, incluida la barra espaciadora, no dispara ni reinicia el juego.
-- [ ] Enviar un alias válido inserta una fila en `scores` con el `game_id` de `asteroids` y la puntuación de la partida, y guarda el alias en `localStorage`.
-- [ ] Pulsar "Omitir" cierra el formulario sin insertar nada.
-- [ ] Una partida produce como máximo una fila: no se puede enviar dos veces la misma puntuación.
-- [ ] Tras enviar, el panel Top 10 de `/juegos/asteroids` incluye la nueva puntuación en su posición correcta sin recarga manual.
-- [ ] `/ranking` lista como máximo 20 filas ordenadas por puntuación descendente y, a igualdad, la más antigua primero.
-- [ ] `/ranking?juego=no-existe` muestra "Juego no encontrado" sin lanzar error.
-- [ ] Con Supabase inalcanzable, `/ranking` y el panel muestran "Sin puntuaciones todavía" y la página no falla.
-- [ ] El nav muestra "Ranking" en escritorio y móvil, y el enlace del Inicio que iba a `/salon` abre `/ranking`.
-- [ ] Reiniciar con Espacio tras GAME OVER oculta el formulario y empieza una partida nueva con 0 puntos.
-- [ ] Navegar fuera de `/juegos/asteroids` y volver no duplica el juego ni el callback `onGameOver`.
-- [ ] A 375 px de ancho no hay scroll horizontal en `/ranking` ni en `/juegos/asteroids`.
-- [ ] La consola del navegador no muestra errores ni warnings de hidratación en `/ranking`, `/juegos/asteroids` ni `/`.
-- [ ] Ningún archivo versionado contiene una clave `service_role` y no se usa ninguna clave distinta de la publicable.
+- [x] Existe `supabase/migrations/20261112000000_games_and_scores.sql` y `list_tables` muestra `games` y `scores` con RLS activo.
+- [x] `games` contiene exactamente una fila con `slug = 'asteroids'`.
+- [x] Con la clave publicable, un `insert` en `scores` con alias de 2 caracteres, alias con espacios, `score` negativo o `score` mayor que 1 000 000 es rechazado por la base.
+- [x] Con la clave publicable, un `update` o `delete` en `scores` y cualquier `insert` en `games` son rechazados.
+- [x] Al llegar a GAME OVER aparece el formulario con el último alias guardado en `arcade-vault:alias:v1` (vacío la primera vez).
+- [x] Escribir un alias con espacios o más de 12 caracteres muestra un error y no inserta nada.
+- [x] Escribir en el campo del alias, incluida la barra espaciadora, no dispara ni reinicia el juego.
+- [x] Enviar un alias válido inserta una fila en `scores` con el `game_id` de `asteroids` y la puntuación de la partida, y guarda el alias en `localStorage`.
+- [x] Pulsar "Omitir" cierra el formulario sin insertar nada.
+- [x] Una partida produce como máximo una fila: no se puede enviar dos veces la misma puntuación.
+- [x] Tras enviar, el panel Top 10 de `/juegos/asteroids` incluye la nueva puntuación en su posición correcta sin recarga manual.
+- [x] `/ranking` lista como máximo 20 filas ordenadas por puntuación descendente y, a igualdad, la más antigua primero.
+- [x] `/ranking?juego=no-existe` muestra "Juego no encontrado" sin lanzar error.
+- [x] Con Supabase inalcanzable, `/ranking` y el panel muestran "Sin puntuaciones todavía" y la página no falla.
+- [x] El nav muestra "Ranking" en escritorio y móvil, y el enlace del Inicio que iba a `/salon` abre `/ranking`.
+- [x] Reiniciar con Espacio tras GAME OVER oculta el formulario y empieza una partida nueva con 0 puntos.
+- [x] Navegar fuera de `/juegos/asteroids` y volver no duplica el juego ni el callback `onGameOver`.
+- [x] A 375 px de ancho no hay scroll horizontal en `/ranking` ni en `/juegos/asteroids`.
+- [x] La consola del navegador no muestra errores ni warnings de hidratación en `/ranking`, `/juegos/asteroids` ni `/`.
+- [x] Ningún archivo versionado contiene una clave `service_role` y no se usa ninguna clave distinta de la publicable.
 
 ---
 
