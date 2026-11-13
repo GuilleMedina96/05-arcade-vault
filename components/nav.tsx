@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const LINKS = [
   { href: "/", label: "Inicio" },
+  { href: "/ranking", label: "Ranking" },
   { href: "/acerca-de", label: "Acerca de" },
 ];
 
@@ -24,7 +25,11 @@ export function Nav() {
         </Link>
         <div className="links">
           {LINKS.map((l) => (
-            <Link key={l.href} href={l.href} className={pathname === l.href ? "active" : ""}>
+            <Link
+              key={l.href}
+              href={l.href}
+              className={pathname === l.href ? "active" : ""}
+            >
               {l.label}
             </Link>
           ))}
@@ -48,7 +53,10 @@ export function Nav() {
         onClick={() => setOpen(false)}
       ></div>
       <aside className={"av-mobile-panel" + (open ? " open" : "")}>
-        <div className="pixel neon-cyan" style={{ fontSize: 11, marginBottom: 16 }}>
+        <div
+          className="pixel neon-cyan"
+          style={{ fontSize: 11, marginBottom: 16 }}
+        >
           MENÚ
         </div>
         {LINKS.map((l) => (
@@ -64,7 +72,11 @@ export function Nav() {
         <div style={{ flex: 1 }}></div>
         <div
           className="pixel"
-          style={{ fontSize: 9, color: "var(--ink-faint)", letterSpacing: "0.16em" }}
+          style={{
+            fontSize: 9,
+            color: "var(--ink-faint)",
+            letterSpacing: "0.16em",
+          }}
         >
           CRÉDITOS · 03
         </div>

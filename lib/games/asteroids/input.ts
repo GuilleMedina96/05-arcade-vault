@@ -14,6 +14,13 @@ export function createInput(): Input {
   const justPressed: Record<string, boolean> = {};
 
   const onKeyDown = (e: KeyboardEvent) => {
+    // Escribir en un campo de texto (p. ej. el alias) no debe controlar el juego
+    const target = e.target;
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement
+    )
+      return;
     // Evita que Espacio y las flechas desplacen la página
     if (GAME_KEYS.has(e.code)) e.preventDefault();
     if (!keys[e.code]) justPressed[e.code] = true;
