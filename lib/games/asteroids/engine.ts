@@ -31,8 +31,12 @@ interface Game {
 /**
  * Arranca el juego sobre el canvas y devuelve la función que lo detiene
  * (cancelAnimationFrame + retirada de listeners).
+ * `onGameOver(score)` se invoca una sola vez por partida, al pasar a "gameover".
  */
-export function startAsteroids(canvas: HTMLCanvasElement): () => void {
+export function startAsteroids(
+  canvas: HTMLCanvasElement,
+  options?: { onGameOver?: (score: number) => void },
+): () => void {
   const ctx = canvas.getContext("2d");
   if (!ctx) return () => {};
 
@@ -92,6 +96,7 @@ export function startAsteroids(canvas: HTMLCanvasElement): () => void {
     game.lives--;
     if (game.lives <= 0) {
       game.state = "gameover";
+      options?.onGameOver?.(game.score);
     } else {
       game.state = "dead";
       game.deadTimer = 2;

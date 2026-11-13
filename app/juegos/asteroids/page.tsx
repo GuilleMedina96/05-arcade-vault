@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+
 import { AsteroidsGame } from "@/components/asteroids-game";
+import {
+  LeaderboardPanel,
+  LeaderboardSkeleton,
+} from "@/components/leaderboard-panel";
 
 export const metadata: Metadata = {
   title: "Asteroids · Arcade Vault",
@@ -21,14 +27,15 @@ export default function AsteroidsPage() {
         </p>
       </header>
 
-      <div className="crt">
-        <div className="crt-screen">
+      <div className="game-layout">
+        <div className="game-stage">
           <AsteroidsGame />
         </div>
-        <div className="crt-bottom">
-          <span className="led">ROCAS</span>
-          <span>1 JUGADOR</span>
-        </div>
+        <aside className="game-side">
+          <Suspense fallback={<LeaderboardSkeleton title="Top 10" />}>
+            <LeaderboardPanel gameSlug="asteroids" limit={10} title="Top 10" />
+          </Suspense>
+        </aside>
       </div>
 
       <ul className="game-controls" aria-label="Controles">

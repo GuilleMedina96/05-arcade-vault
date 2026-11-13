@@ -247,7 +247,7 @@ export default function HomePage() {
               <div className="ac-title pixel neon-magenta">
                 ▸ TOP JUGADORES · HOY
               </div>
-              <Link href="/salon" className="lb-link">
+              <Link href="/ranking" className="lb-link">
                 VER SALÓN →
               </Link>
             </div>
