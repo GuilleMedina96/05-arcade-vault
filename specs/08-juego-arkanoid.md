@@ -1,6 +1,6 @@
 # SPEC 08 — Juego Arkanoid en `/juegos/arkanoid` con leaderboard
 
-> **Estado:** Approved
+> **Estado:** Implementada
 > **Depende de:** SPEC 05 (patrón de motor + canvas y marco `.crt`), SPEC 06 (tablas `games`/`scores`, `ScoreSubmit`, `LeaderboardPanel`, `/ranking`), SPEC 07 (entrada compartida `lib/games/input.ts` y `submitScore` en `app/juegos/actions.ts`), SPEC 02 (tarjeta "BLOQUE BUSTER" del Inicio)
 > **Fecha:** 2026-11-18
 > **Objetivo:** Portar a TypeScript el Arkanoid de `references/resources/started-games/04-arkanoid/`, jugarlo en `/juegos/arkanoid` dentro de un marco CRT y conectarlo al ranking existente (envío de puntuación con alias, Top 10 y `/ranking?juego=arkanoid`).
@@ -143,29 +143,29 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 ## Criterios de aceptación
 
 - [ ] `npx eslint app components lib`, `npx tsc --noEmit`, `npx prettier --check .` y `npm run build` terminan sin errores.
-- [ ] El build lista `/juegos/arkanoid` como ruta (prerenderizado parcial) y Asteroids y Tetris siguen funcionando igual.
-- [ ] `games` contiene una fila con `slug = 'arkanoid'` y existe su migración en `supabase/migrations/`.
-- [ ] `/juegos/arkanoid` muestra el juego en un marco `.crt` con el título de pestaña "Arkanoid · Arcade Vault".
-- [ ] Se ven los 60 bloques del nivel 1 con los sprites del spritesheet, la pala y la pelota.
+- [x] El build lista `/juegos/arkanoid` como ruta (prerenderizado parcial) y Asteroids y Tetris siguen funcionando igual.
+- [x] `games` contiene una fila con `slug = 'arkanoid'` y existe su migración en `supabase/migrations/`.
+- [x] `/juegos/arkanoid` muestra el juego en un marco `.crt` con el título de pestaña "Arkanoid · Arcade Vault".
+- [x] Se ven los 60 bloques del nivel 1 con los sprites del spritesheet, la pala y la pelota.
 - [ ] El ratón mueve la pala sin salirse del canvas, incluso con el canvas escalado por CSS; ← → la mueven a 400 px/s.
 - [ ] La pelota rebota en paredes, techo y pala; romper un bloque suma 10 puntos, invierte `vy`, reproduce la explosión de 4 fotogramas y rompe como máximo un bloque por fotograma.
 - [ ] Al romper todos los bloques se carga el nivel siguiente con la pelota más rápida (1,00 / 1,10 / 1,21 / 1,33 / 1,46) y el diseño del original; el HUD muestra el nivel.
-- [ ] Dejar caer la pelota resta una vida y la recoloca sobre la pala; con 0 vidas aparece "GAME OVER".
+- [x] Dejar caer la pelota resta una vida y la recoloca sobre la pala; con 0 vidas aparece "GAME OVER".
 - [ ] Completar el nivel 5 muestra "¡Completaste el juego!".
 - [ ] `P` y `Escape` pausan y reanudan mostrando "PAUSA" en el canvas; en pausa la pala no se mueve con el teclado. **No** hay botones de salto de nivel.
 - [ ] Los sonidos de rebote y de rotura suenan tras la primera interacción; si el navegador los bloquea, no hay errores en la consola.
 - [ ] Una partida produce como máximo una fila: `onGameOver` se llama una sola vez, tanto en derrota como en victoria, y no se puede enviar dos veces la misma puntuación; "Omitir" no inserta nada.
 - [ ] Escribir el alias (incluida la barra espaciadora y las flechas) no mueve la pala ni reinicia el juego.
-- [ ] Reiniciar con Espacio oculta el formulario y empieza con nivel 1, 3 vidas y 0 puntos.
-- [ ] Espacio y las flechas no desplazan la página mientras el juego está en pantalla.
-- [ ] Navegar fuera de `/juegos/arkanoid` y volver no duplica la velocidad del juego, los sonidos ni `onGameOver`.
+- [x] Reiniciar con Espacio oculta el formulario y empieza con nivel 1, 3 vidas y 0 puntos.
+- [x] Espacio y las flechas no desplazan la página mientras el juego está en pantalla.
+- [x] Navegar fuera de `/juegos/arkanoid` y volver no duplica la velocidad del juego, los sonidos ni `onGameOver`.
 - [ ] Navegar fuera antes de que cargue el spritesheet no deja ningún bucle ni listener activo.
 - [ ] Mantener una flecha pulsada y cambiar de ventana no deja la pala moviéndose al volver.
-- [ ] Tras enviar, el Top 10 refleja la puntuación sin recarga manual, y `/ranking?juego=arkanoid` lista el juego respetando el orden (puntuación descendente, más antigua primero).
+- [x] Tras enviar, el Top 10 refleja la puntuación sin recarga manual, y `/ranking?juego=arkanoid` lista el juego respetando el orden (puntuación descendente, más antigua primero).
 - [ ] Con Supabase inalcanzable la página no falla y muestra "Sin puntuaciones todavía".
-- [ ] A 375 px de ancho no hay scroll horizontal y el canvas conserva su proporción.
+- [x] A 375 px de ancho no hay scroll horizontal y el canvas conserva su proporción.
 - [ ] Pulsar la tarjeta "BLOQUE BUSTER" en `/` y la tarjeta de `/biblioteca` lleva a `/juegos/arkanoid`.
-- [ ] Sin errores ni warnings de hidratación en la consola, y ninguna clave `service_role` en el repositorio.
+- [x] Sin errores ni warnings de hidratación en la consola, y ninguna clave `service_role` en el repositorio.
 
 ---
 
