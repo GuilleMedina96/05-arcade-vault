@@ -3249,7 +3249,8 @@ a {
   color: var(--ink-dim);
 }
 
-.asteroids-canvas {
+.asteroids-canvas,
+.arkanoid-canvas {
   position: absolute;
   inset: 0;
   display: block;
