@@ -13,6 +13,12 @@ const GAMES = [
     href: "/juegos/tetris",
   },
   {
+    title: "ARKANOID",
+    cat: "ARCADE",
+    cover: "cover-bricks",
+    href: "/juegos/arkanoid",
+  },
+  {
     title: "ASTEROIDS",
     cat: "SHOOTER",
     cover: "cover-rocas",
