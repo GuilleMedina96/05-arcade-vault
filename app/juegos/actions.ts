@@ -54,7 +54,7 @@ export async function submitScore(input: {
     return { ok: false, error: "failed" };
   }
 
-  revalidatePath("/juegos/asteroids");
+  revalidatePath(`/juegos/${gameSlug}`);
   revalidatePath("/ranking");
   return { ok: true };
 }

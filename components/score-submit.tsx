@@ -3,7 +3,7 @@
 import { useId, useState, useTransition } from "react";
 import type { FormEvent } from "react";
 
-import { submitScore } from "@/app/juegos/asteroids/actions";
+import { submitScore } from "@/app/juegos/actions";
 
 const ALIAS_KEY = "arcade-vault:alias:v1";
 const ALIAS_PATTERN = /^[A-Za-z0-9_-]{3,12}$/;

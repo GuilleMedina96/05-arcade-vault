@@ -6,7 +6,7 @@ import {
   WIDTH,
 } from "./constants";
 import { Asteroid, Bullet, Particle, PowerUp, Ship } from "./entities";
-import { createInput } from "./input";
+import { createInput } from "../input";
 import { dist, rand } from "./math";
 
 export { HEIGHT, WIDTH };
