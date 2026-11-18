@@ -117,25 +117,25 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 ## Criterios de aceptación
 
 - [ ] `npx eslint app components lib`, `npx tsc --noEmit`, `npx prettier --check .` y `npm run build` terminan sin errores.
-- [ ] El build lista `/juegos/tetris` como ruta (prerenderizado parcial) y Asteroids sigue funcionando igual.
-- [ ] `games` contiene una fila con `slug = 'tetris'` y existe su migración en `supabase/migrations/`.
-- [ ] `/juegos/tetris` muestra el juego en un marco `.crt` con el título de pestaña "Tetris · Arcade Vault".
-- [ ] El tablero es de 10×20; aparecen solo las 7 piezas clásicas y se ve la pieza siguiente y la pieza fantasma.
-- [ ] ← → mueven, ↑ rota con _wall kicks_, ↓ baja una fila (+1 punto) y Espacio hace caída directa (+2 por celda).
-- [ ] Completar 1, 2, 3 y 4 líneas suma 100, 300, 500 y 800 por el nivel actual; el nivel sube cada 10 líneas y la caída se acelera hasta un mínimo de 100 ms.
-- [ ] `P` pausa y reanuda la partida mostrando "PAUSA" en el canvas, y no se puede mover mientras está en pausa.
-- [ ] Al no caber la pieza nueva aparece "GAME OVER" con la puntuación y Espacio reinicia a 0 puntos, 0 líneas y nivel 1.
-- [ ] Una partida produce como máximo una fila: `onGameOver` se llama una sola vez y no se puede enviar dos veces la misma puntuación; "Omitir" no inserta nada.
-- [ ] Escribir el alias (incluida la barra espaciadora y las flechas) no mueve, no cae ni reinicia el juego.
-- [ ] Reiniciar con Espacio oculta el formulario y empieza con 0 puntos.
-- [ ] Espacio y las flechas (incluida ↓) no desplazan la página mientras el juego está en pantalla.
-- [ ] Navegar fuera de `/juegos/tetris` y volver no duplica la velocidad del juego ni `onGameOver`.
-- [ ] Mantener una tecla pulsada y cambiar de ventana no deja la pieza moviéndose al volver.
-- [ ] Tras enviar, el Top 10 refleja la puntuación sin recarga manual, y `/ranking?juego=tetris` lista el juego respetando el orden (puntuación descendente, más antigua primero).
-- [ ] Con Supabase inalcanzable la página no falla y muestra "Sin puntuaciones todavía".
-- [ ] A 375 px de ancho no hay scroll horizontal y el canvas conserva su proporción.
-- [ ] Pulsar la tarjeta "CAÍDA" en `/` lleva a `/juegos/tetris`.
-- [ ] Sin errores ni warnings de hidratación en la consola, y ninguna clave `service_role` en el repositorio.
+- [x] El build lista `/juegos/tetris` como ruta (prerenderizado parcial) y Asteroids sigue funcionando igual.
+- [x] `games` contiene una fila con `slug = 'tetris'` y existe su migración en `supabase/migrations/`.
+- [x] `/juegos/tetris` muestra el juego en un marco `.crt` con el título de pestaña "Tetris · Arcade Vault".
+- [x] El tablero es de 10×20; aparecen solo las 7 piezas clásicas y se ve la pieza siguiente y la pieza fantasma.
+- [x] ← → mueven, ↑ rota con _wall kicks_, ↓ baja una fila (+1 punto) y Espacio hace caída directa (+2 por celda).
+- [x] Completar 1, 2, 3 y 4 líneas suma 100, 300, 500 y 800 por el nivel actual; el nivel sube cada 10 líneas y la caída se acelera hasta un mínimo de 100 ms.
+- [x] `P` pausa y reanuda la partida mostrando "PAUSA" en el canvas, y no se puede mover mientras está en pausa.
+- [x] Al no caber la pieza nueva aparece "GAME OVER" con la puntuación y Espacio reinicia a 0 puntos, 0 líneas y nivel 1.
+- [x] Una partida produce como máximo una fila: `onGameOver` se llama una sola vez y no se puede enviar dos veces la misma puntuación; "Omitir" no inserta nada.
+- [x] Escribir el alias (incluida la barra espaciadora y las flechas) no mueve, no cae ni reinicia el juego.
+- [x] Reiniciar con Espacio oculta el formulario y empieza con 0 puntos.
+- [x] Espacio y las flechas (incluida ↓) no desplazan la página mientras el juego está en pantalla.
+- [x] Navegar fuera de `/juegos/tetris` y volver no duplica la velocidad del juego ni `onGameOver`.
+- [x] Mantener una tecla pulsada y cambiar de ventana no deja la pieza moviéndose al volver.
+- [x] Tras enviar, el Top 10 refleja la puntuación sin recarga manual, y `/ranking?juego=tetris` lista el juego respetando el orden (puntuación descendente, más antigua primero).
+- [x] Con Supabase inalcanzable la página no falla y muestra "Sin puntuaciones todavía".
+- [x] A 375 px de ancho no hay scroll horizontal y el canvas conserva su proporción.
+- [x] Pulsar la tarjeta "CAÍDA" en `/` lleva a `/juegos/tetris`.
+- [x] Sin errores ni warnings de hidratación en la consola, y ninguna clave `service_role` en el repositorio.
 
 ---
 
