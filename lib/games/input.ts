@@ -7,7 +7,13 @@ export interface Input {
   destroy: () => void;
 }
 
-const GAME_KEYS = new Set(["Space", "ArrowUp", "ArrowLeft", "ArrowRight"]);
+const GAME_KEYS = new Set([
+  "Space",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+]);
 
 export function createInput(): Input {
   const keys: Record<string, boolean> = {};

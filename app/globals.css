@@ -3478,3 +3478,21 @@ a {
   max-width: max(640px, calc((100svh - 526px) * 4 / 3 + 48px));
   margin-inline: auto;
 }
+
+/* Tetris: canvas vertical 450×600 (3:4) en el marco CRT */
+.tetris-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.game-page .crt.crt-tall {
+  /* 526px = barra, título, leyenda, pie y relleno; el ancho sale del alto disponible */
+  max-width: min(480px, max(340px, calc((100svh - 526px) * 3 / 4 + 48px)));
+}
+
+.crt-tall .crt-screen {
+  aspect-ratio: 3 / 4;
+}

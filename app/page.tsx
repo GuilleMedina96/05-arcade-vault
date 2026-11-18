@@ -39,7 +39,12 @@ const FEATURES: { i: FeatureKind; t: string; d: string; c: Accent }[] = [
 
 const GAMES: { title: string; cat: string; cover: string; href?: string }[] = [
   { title: "BLOQUE BUSTER", cat: "ARCADE", cover: "cover-bricks" },
-  { title: "CAÍDA", cat: "PUZZLE", cover: "cover-tetro" },
+  {
+    title: "CAÍDA",
+    cat: "PUZZLE",
+    cover: "cover-tetro",
+    href: "/juegos/tetris",
+  },
   { title: "SERPENTINA", cat: "ARCADE", cover: "cover-snake" },
   { title: "GLOTÓN", cat: "ARCADE", cover: "cover-glot" },
   { title: "INVASORES", cat: "SHOOTER", cover: "cover-invaders" },
