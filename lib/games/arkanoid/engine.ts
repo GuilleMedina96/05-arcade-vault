@@ -146,20 +146,6 @@ export function startArkanoid(
     );
   }
 
-  // ── Ratón ─────────────────────────────────────────────────────────────────
-  // El canvas se escala por CSS: se pasa de píxeles CSS a internos
-  const onMouseMove = (e: MouseEvent) => {
-    const rect = canvas.getBoundingClientRect();
-    if (rect.width === 0) return;
-    const mouseX = ((e.clientX - rect.left) * canvas.width) / rect.width;
-    const { paddle } = game;
-    paddle.x = Math.max(
-      0,
-      Math.min(canvas.width - paddle.w, mouseX - paddle.w / 2),
-    );
-  };
-  canvas.addEventListener("mousemove", onMouseMove);
-
   // ── Update ────────────────────────────────────────────────────────────────
   function update(dt: number) {
     // Se consumen siempre para que una pulsación vieja no actúe más tarde
@@ -365,7 +351,6 @@ export function startArkanoid(
   return () => {
     stopped = true;
     cancelAnimationFrame(rafId);
-    canvas.removeEventListener("mousemove", onMouseMove);
     input.destroy();
   };
 }

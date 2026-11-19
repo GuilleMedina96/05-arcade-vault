@@ -12,7 +12,6 @@ export const metadata: Metadata = {
 };
 
 const CONTROLS = [
-  { keys: ["Ratón"], label: "Mover la pala" },
   { keys: ["←", "→"], label: "Mover la pala" },
   { keys: ["P", "Esc"], label: "Pausa" },
   { keys: ["Espacio"], label: "Reiniciar" },

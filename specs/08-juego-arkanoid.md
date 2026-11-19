@@ -11,7 +11,7 @@
 
 El juego existe como proyecto independiente: `index.html` + `game.js` (268 líneas) + `levels.js` + `assets/spritesheet.js`, todo con variables globales, `document.getElementById`, listeners de `document` y `canvas` que nunca se retiran y un `requestAnimationFrame` sin handle. Esa forma no encaja en Next.js por las razones de la SPEC 05: el bucle y los listeners se duplicarían con el doble montaje de Strict Mode y con la navegación.
 
-A diferencia de Asteroids y Tetris, Arkanoid **tiene assets** (un spritesheet PNG y dos sonidos) y **usa el ratón**. Ambos aspectos son nuevos para la plataforma: la carga asíncrona de la imagen obliga a una bandera `stopped` en la limpieza, y el puntero obliga a convertir coordenadas CSS a internas.
+A diferencia de Asteroids y Tetris, Arkanoid **tiene assets** (un spritesheet PNG y dos sonidos). Es nuevo para la plataforma: la carga asíncrona de la imagen obliga a una bandera `stopped` en la limpieza.
 
 La plataforma de puntuaciones ya es genérica por `gameSlug` y la SPEC 07 dejó compartidos `createInput` y `submitScore`. Esta spec solo añade el juego y un cambio deliberado de reglas: retirar el menú de salto de nivel de la pausa.
 
@@ -24,7 +24,7 @@ La plataforma de puntuaciones ya es genérica por `gameSlug` y la SPEC 07 dejó 
 - Migración `supabase/migrations/<timestamp>_seed_arkanoid.sql` que siembra la fila `arkanoid` en `games`.
 - Port a TypeScript en `lib/games/arkanoid/`: constantes, niveles tipados, spritesheet y motor.
 - Gameplay del original: canvas 800×600, pala, pelota, 5 niveles con velocidad creciente, 3 vidas, 10 puntos por bloque, explosión animada de 4 fotogramas (150 ms) al romper un bloque, rebote en paredes, techo y pala, un bloque por fotograma.
-- Control con **ratón y flechas ← →** (velocidad de la pala 400 px/s con teclado).
+- Control de la pala **solo con las flechas ← →** (400 px/s). El ratón del original se descarta (ver Decisiones).
 - Pausa con `P` o `Escape`, con overlay "PAUSA" dibujado en el canvas.
 - Overlays "GAME OVER" y "¡Completaste el juego!" en el canvas. **Reinicio con Espacio** tras cualquiera de los dos (nivel 1, 3 vidas, 0 puntos).
 - HUD en el mismo canvas: puntuación, nivel y vidas.
@@ -122,7 +122,6 @@ Convenciones:
 - `score` es la puntuación del HUD: 10 por bloque. Los 5 niveles suman 208 bloques, es decir **2 080 puntos como máximo**, muy por debajo del tope de 1 000 000 de la base. No hace falta migrar el `check`.
 - Spritesheet: `lib/games/arkanoid/spritesheet.ts` carga `public/games/arkanoid/spritesheet-breakout.png` dentro del motor, no durante el render. El motor arranca el bucle en `onload`; si la limpieza se ejecuta antes, una bandera `stopped` impide arrancarlo.
 - Sonido: los `Audio` se crean dentro de `startArkanoid` y se reproducen con `cloneNode()`. Un `play()` rechazado por el navegador (sin interacción previa) se ignora sin error.
-- Ratón: los listeners `mousemove` se registran sobre el canvas y se retiran en la limpieza. Las coordenadas se convierten de píxeles CSS a internos con `getBoundingClientRect()`, porque el canvas se escala por CSS.
 - Teclas: `createInput` ya ignora `keydown` con `target` en `input`/`textarea` y vacía las teclas en `blur`. Hay que comprobar que su conjunto de teclas cubre `ArrowLeft`, `ArrowRight`, Espacio, `P` y `Escape`.
 
 ---
@@ -132,8 +131,8 @@ Convenciones:
 Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Components y `cacheComponents`, según indica `AGENTS.md`. Para la página y los estilos (paso 3), usar el skill `/frontend-design`, como exige `CLAUDE.md`. Se trabaja en la rama `spec-08-juego-arkanoid` con un commit por paso y pausa para confirmar tras cada uno. Cada paso deja la app ejecutable.
 
 1. **Sembrar el juego.** Crear `supabase/migrations/<timestamp>_seed_arkanoid.sql` con el `insert` anterior, mostrarlo, esperar el visto bueno y aplicarlo con `apply_migration` desde el archivo. Verificación: `execute_sql` devuelve la fila `arkanoid` y `games` tiene 3 filas.
-2. **Assets y motor.** Copiar `spritesheet-breakout.png` y los dos mp3 a `public/games/arkanoid/`. Crear `lib/games/arkanoid/constants.ts`, `levels.ts`, `spritesheet.ts` y `engine.ts` con `startArkanoid`: carga del spritesheet con bandera `stopped`, bucle `requestAnimationFrame`, física y colisiones del original, explosiones, vidas, pausa (`P`/`Escape`), GAME OVER, victoria, reinicio con Espacio, ratón y flechas, sonidos y HUD. Sin menú de salto de nivel. Revisar el conjunto de teclas de `lib/games/input.ts`. Verificación: `npx tsc --noEmit` y `npx eslint lib` sin errores, y Asteroids y Tetris siguen funcionando.
-3. **Componente y página.** Crear `components/arkanoid-game.tsx` (`"use client"`, `useRef`, `useEffect` que arranca el motor y devuelve la limpieza; estado `finished {id, score}`; `<ScoreSubmit gameSlug="arkanoid">`; ocultar el formulario al reiniciar con Espacio) y `app/juegos/arkanoid/page.tsx` con `metadata`, marco `.crt`, panel Top 10 en `<Suspense fallback={<LeaderboardSkeleton />}>` y leyenda de controles (ratón o ← → mover pala, P o Esc pausa, Espacio reiniciar). El canvas es 800×600 (4:3): añadir en `app/globals.css` solo `.arkanoid-canvas` si hace falta, sin tocar las reglas de Asteroids ni Tetris. Verificación: `/juegos/arkanoid` muestra el juego y responde al ratón y al teclado.
+2. **Assets y motor.** Copiar `spritesheet-breakout.png` y los dos mp3 a `public/games/arkanoid/`. Crear `lib/games/arkanoid/constants.ts`, `levels.ts`, `spritesheet.ts` y `engine.ts` con `startArkanoid`: carga del spritesheet con bandera `stopped`, bucle `requestAnimationFrame`, física y colisiones del original, explosiones, vidas, pausa (`P`/`Escape`), GAME OVER, victoria, reinicio con Espacio, flechas, sonidos y HUD. Sin menú de salto de nivel. Revisar el conjunto de teclas de `lib/games/input.ts`. Verificación: `npx tsc --noEmit` y `npx eslint lib` sin errores, y Asteroids y Tetris siguen funcionando.
+3. **Componente y página.** Crear `components/arkanoid-game.tsx` (`"use client"`, `useRef`, `useEffect` que arranca el motor y devuelve la limpieza; estado `finished {id, score}`; `<ScoreSubmit gameSlug="arkanoid">`; ocultar el formulario al reiniciar con Espacio) y `app/juegos/arkanoid/page.tsx` con `metadata`, marco `.crt`, panel Top 10 en `<Suspense fallback={<LeaderboardSkeleton />}>` y leyenda de controles (← → mover pala, P o Esc pausa, Espacio reiniciar). El canvas es 800×600 (4:3): añadir en `app/globals.css` solo `.arkanoid-canvas` si hace falta, sin tocar las reglas de Asteroids ni Tetris. Verificación: `/juegos/arkanoid` muestra el juego y responde al teclado.
 4. **Envío de puntuación.** `submitScore` y su `revalidatePath` por `gameSlug` ya son compartidos desde la SPEC 07: no se cambia código. Verificación: `ScoreSubmit` con `gameSlug="arkanoid"` inserta una fila y una entrada inválida devuelve `{ ok: false, error: "invalid" }`.
 5. **Enlaces.** Enlazar la tarjeta "BLOQUE BUSTER" de `app/page.tsx` a `/juegos/arkanoid` y añadir el juego a la lista de `app/biblioteca/page.tsx`. Verificación: ambas pulsaciones abren el juego. Nav y `/ranking` no cambian: el juego aparece en el selector al estar sembrado.
 6. **Cierre.** Ejecutar `npx tsc --noEmit`, `npx eslint app components lib`, `npx prettier --check .` y `npm run build`. Luego verificar en el navegador una partida completa: llegar a GAME OVER, ver el formulario, enviar un alias, ver la fila en el Top 10 y en `/ranking?juego=arkanoid`, y repetirlo tras reiniciar. Comprobar también la victoria tras el nivel 5. Revisar la consola en busca de errores de hidratación.
@@ -147,7 +146,7 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 - [x] `games` contiene una fila con `slug = 'arkanoid'` y existe su migración en `supabase/migrations/`.
 - [x] `/juegos/arkanoid` muestra el juego en un marco `.crt` con el título de pestaña "Arkanoid · Arcade Vault".
 - [x] Se ven los 60 bloques del nivel 1 con los sprites del spritesheet, la pala y la pelota.
-- [ ] El ratón mueve la pala sin salirse del canvas, incluso con el canvas escalado por CSS; ← → la mueven a 400 px/s.
+- [ ] ← → mueven la pala a 400 px/s sin salirse del canvas, y el ratón no la mueve.
 - [ ] La pelota rebota en paredes, techo y pala; romper un bloque suma 10 puntos, invierte `vy`, reproduce la explosión de 4 fotogramas y rompe como máximo un bloque por fotograma.
 - [ ] Al romper todos los bloques se carga el nivel siguiente con la pelota más rápida (1,00 / 1,10 / 1,21 / 1,33 / 1,46) y el diseño del original; el HUD muestra el nivel.
 - [x] Dejar caer la pelota resta una vida y la recoloca sobre la pala; con 0 vidas aparece "GAME OVER".
@@ -174,7 +173,8 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 - **Sí:** port a TypeScript con la lógica en `lib/games/arkanoid/` sin React y `startArkanoid(canvas, options)` devolviendo la limpieza. Es el contrato de la SPEC 05 y evita bucles y listeners duplicados.
 - **Sí:** quitar el menú "Saltar al nivel" de la pausa. Es una decisión explícita del usuario: con ranking, permitiría empezar en cualquier nivel y falsear la partida. **Cambia el comportamiento respecto al original**, que lo usaba para probar niveles.
 - **No:** mantener el salto de nivel, ni siquiera marcando la partida como no puntuable. Añade lógica y estado solo para una herramienta de depuración.
-- **Sí:** control con ratón y flechas. Es el control principal del original; sus listeners se retiran en la limpieza.
+- **Sí:** control solo con flechas. Decisión posterior a la aprobación: el control con ratón del original se descarta porque no encaja bien en la página.
+- **No:** control con ratón. Se aprobó inicialmente y se retiró tras probarlo; el original lo tenía, así que **cambia el comportamiento respecto a él**.
 - **Sí:** reinicio con Espacio tras GAME OVER y tras la victoria. El original no reinicia; se sigue la convención de Asteroids y Tetris y es lo que permite jugar varias partidas con ranking.
 - **Sí:** pausa con `P` y `Escape`, como el original.
 - **No:** pausar al perder el foco. No existe en el original y es otra feature; sí se vacían las teclas pulsadas en `blur`.
@@ -197,13 +197,12 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 | Con Strict Mode el `useEffect` corre dos veces y el juego se duplica.                                            | `startArkanoid` devuelve la limpieza y el `useEffect` la retorna; hay un criterio de aceptación.                                           |
 | La imagen carga de forma asíncrona y el componente se desmonta antes: el bucle arranca tras la limpieza.         | Bandera `stopped` comprobada en `onload`; criterio de aceptación específico.                                                               |
 | `cacheComponents` rompe el prerender si se usa `Math.random`, `performance.now`, `Audio` o `Image` en el render. | Todo vive dentro del motor, que arranca en `useEffect`.                                                                                    |
-| El ratón usa coordenadas CSS y el canvas está escalado: la pala se desplaza respecto al puntero.                 | Conversión con `getBoundingClientRect()`; se comprueba a distintos anchos.                                                                 |
 | Los navegadores bloquean `Audio.play()` sin interacción previa y lanzan promesas rechazadas.                     | Se captura el rechazo de `play()` sin ruido en consola.                                                                                    |
 | `createInput` no cubre `Escape` o `P` y la página hace scroll o la pausa no responde.                            | El paso 2 revisa el conjunto de teclas, sin alterar el resto, y se verifica Asteroids y Tetris.                                            |
 | Una `dt` grande atraviesa bloques o la pala (colisión AABB sin barrido).                                         | `dt` limitado a 0,05 s; con velocidad máxima de unos 440 px/s el desplazamiento por fotograma queda en 22 px, menor que el bloque (24 px). |
 | La pala de 81 px difiere de los 162 px del `CLAUDE.md` original y el juego se siente distinto al esperado.       | Decisión explícita y documentada; se mantiene el valor del código.                                                                         |
 | Quitar el salto de nivel dificulta verificar los niveles 2–5 manualmente.                                        | Se verifican jugando; si hace falta, una herramienta de depuración local va en otra spec, sin llegar a producción.                         |
-| En móvil no hay teclado ni ratón, así que no es jugable.                                                         | Aceptado, igual que en las SPEC 05 y 07; los controles táctiles quedan fuera de alcance.                                                   |
+| En móvil no hay teclado, así que no es jugable.                                                                  | Aceptado, igual que en las SPEC 05 y 07; los controles táctiles quedan fuera de alcance.                                                   |
 | Alguien envía una puntuación falsa.                                                                              | Aceptado desde la SPEC 06; los `check` de la tabla acotan alias y puntuación.                                                              |
 
 ---
