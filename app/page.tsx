@@ -56,6 +56,12 @@ const GAMES: { title: string; cat: string; cover: string; href: string }[] = [
     cover: "cover-rocas",
     href: "/juegos/asteroids",
   },
+  {
+    title: "SERPIENTE",
+    cat: "ARCADE",
+    cover: "cover-snake",
+    href: "/juegos/snake",
+  },
 ];
 
 const STATS = [
