@@ -24,6 +24,12 @@ const GAMES = [
     cover: "cover-rocas",
     href: "/juegos/asteroids",
   },
+  {
+    title: "SNAKE",
+    cat: "ARCADE",
+    cover: "cover-snake",
+    href: "/juegos/snake",
+  },
 ];
 
 export default function BibliotecaPage() {

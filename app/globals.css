@@ -2221,6 +2221,18 @@ a {
   margin-top: 24px;
 }
 
+/* Pocos juegos: tarjetas de ancho fijo centradas en vez de 6 columnas vacías */
+.mini-rail.mini-rail-few {
+  grid-template-columns: repeat(3, minmax(0, 220px));
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .mini-rail.mini-rail-few {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .mini-card {
   background: var(--bg-2);
   border: 1px solid var(--line);
@@ -3251,6 +3263,14 @@ a {
 
 .asteroids-canvas,
 .arkanoid-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.snake-canvas {
   position: absolute;
   inset: 0;
   display: block;

@@ -26,6 +26,7 @@ La plataforma de puntuaciones ya es genérica por `gameSlug` y la SPEC 07 dejó 
 - Gameplay del original: canvas 800×600, pala, pelota, 5 niveles con velocidad creciente, 3 vidas, 10 puntos por bloque, explosión animada de 4 fotogramas (150 ms) al romper un bloque, rebote en paredes, techo y pala, un bloque por fotograma.
 - **Bloques grises resistentes** (regla nueva, ausente en el original): aguantan un golpe y se rompen al segundo. Tras el primero se dibujan oscurecidos, la pelota rebota con el sonido de rebote y no suman puntos; al romperse explotan y suman 20. Solo existen en el nivel 2 (2 bloques).
 - Control de la pala **solo con las flechas ← →** (400 px/s). El ratón del original se descarta (ver Decisiones).
+- **Inicio con Espacio:** al cargar la página la pelota espera sobre la pala (que se puede mover) con el aviso "ESPACIO PARA EMPEZAR" y no sale hasta pulsar Espacio. Tras GAME OVER o victoria, Espacio reinicia y lanza la pelota directamente. Tras perder una vida la pelota sale sola, como en el original.
 - Pausa con `P` o `Escape`, con overlay "PAUSA" dibujado en el canvas.
 - Overlays "GAME OVER" y "¡Completaste el juego!" en el canvas. **Reinicio con Espacio** tras cualquiera de los dos (nivel 1, 3 vidas, 0 puntos).
 - HUD en el mismo canvas: puntuación, nivel y vidas.
@@ -73,7 +74,7 @@ export function startArkanoid(
 Estructura interna (sustituye a los globales de `game.js`):
 
 ```ts
-type GameState = "playing" | "paused" | "gameover" | "win";
+type GameState = "ready" | "playing" | "paused" | "gameover" | "win";
 
 interface Block {
   x: number;
@@ -150,6 +151,7 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 - [x] Se ven los 60 bloques del nivel 1 con los sprites del spritesheet, la pala y la pelota.
 - [ ] ← → mueven la pala a 400 px/s sin salirse del canvas, y el ratón no la mueve.
 - [ ] Un bloque gris aguanta el primer golpe (rebota la pelota, se oscurece y no suma puntos) y se rompe al segundo con explosión y +20; un solo impacto nunca cuenta dos golpes.
+- [ ] Al cargar la página la pelota no se mueve hasta pulsar Espacio: se ve el aviso, la pelota acompaña a la pala y no se pierde ninguna vida mientras tanto.
 - [ ] La pelota rebota en paredes, techo y pala; romper un bloque de otro color suma 10 puntos, invierte `vy`, reproduce la explosión de 4 fotogramas y rompe como máximo un bloque por fotograma.
 - [ ] Al romper todos los bloques se carga el nivel siguiente con la pelota más rápida (1,00 / 1,10 / 1,21 / 1,33 / 1,46) y el diseño del original; el HUD muestra el nivel.
 - [x] Dejar caer la pelota resta una vida y la recoloca sobre la pala; con 0 vidas aparece "GAME OVER".
@@ -180,6 +182,8 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 - **No:** control con ratón. Se aprobó inicialmente y se retiró tras probarlo; el original lo tenía, así que **cambia el comportamiento respecto a él**.
 - **Sí:** reinicio con Espacio tras GAME OVER y tras la victoria. El original no reinicia; se sigue la convención de Asteroids y Tetris y es lo que permite jugar varias partidas con ranking.
 - **Sí:** pausa con `P` y `Escape`, como el original.
+- **Sí:** estado de espera al cargar que exige pulsar Espacio. Decisión posterior a la aprobación, a petición del usuario: el original lanzaba la pelota al cargar, pero en una página web eso hace perder vidas antes de que el jugador esté listo.
+- **No:** esperar Espacio al reiniciar tras GAME OVER ni al perder una vida. El Espacio del reinicio ya es el gesto de empezar, y la pelota sale sola tras perder una vida como en el original.
 - **No:** pausar al perder el foco. No existe en el original y es otra feature; sí se vacían las teclas pulsadas en `blur`.
 - **Sí:** portar los sonidos tal cual, creados solo dentro del motor. Sin silenciar ni volumen; si hace falta, va en otra spec.
 - **Sí:** HUD dibujado en el mismo canvas (puntuación, nivel y vidas con el sprite de la pelota), como el original. No hace falta panel React.
