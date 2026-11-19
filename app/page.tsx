@@ -37,7 +37,7 @@ const FEATURES: { i: FeatureKind; t: string; d: string; c: Accent }[] = [
   },
 ];
 
-const GAMES: { title: string; cat: string; cover: string; href?: string }[] = [
+const GAMES: { title: string; cat: string; cover: string; href: string }[] = [
   {
     title: "BLOQUE BUSTER",
     cat: "ARCADE",
@@ -50,9 +50,6 @@ const GAMES: { title: string; cat: string; cover: string; href?: string }[] = [
     cover: "cover-tetro",
     href: "/juegos/tetris",
   },
-  { title: "SERPENTINA", cat: "ARCADE", cover: "cover-snake" },
-  { title: "GLOTÓN", cat: "ARCADE", cover: "cover-glot" },
-  { title: "INVASORES", cat: "SHOOTER", cover: "cover-invaders" },
   {
     title: "ROCAS",
     cat: "SHOOTER",
@@ -187,13 +184,9 @@ export default function HomePage() {
       {/* JUEGOS */}
       <section className="home-section reveal">
         <SectionHead n="02" color="cyan" title="JUEGOS DISPONIBLES AHORA" />
-        <div className="mini-rail">
+        <div className="mini-rail mini-rail-few">
           {GAMES.map((g) => (
-            <Link
-              key={g.title}
-              href={g.href ?? "/biblioteca"}
-              className="mini-card"
-            >
+            <Link key={g.title} href={g.href} className="mini-card">
               <div className="mini-cover">
                 <div className={"cover-bg " + g.cover}></div>
               </div>
