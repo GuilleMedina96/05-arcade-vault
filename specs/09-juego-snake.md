@@ -1,6 +1,6 @@
 # SPEC 09 — Juego Snake en `/juegos/snake` con leaderboard
 
-> **Estado:** Aprobado
+> **Estado:** Implementada
 > **Depende de:** SPEC 05 (patrón de motor + canvas y marco `.crt`), SPEC 06 (tablas `games`/`scores`, `ScoreSubmit`, `LeaderboardPanel`, `/ranking`), SPEC 07 (entrada compartida `lib/games/input.ts` y `submitScore` en `app/juegos/actions.ts`), SPEC 08 (patrón de espera con Espacio, pausa y enlaces del Inicio y la Biblioteca)
 > **Fecha:** 2026-11-18
 > **Objetivo:** Crear el clásico Snake en TypeScript, jugarlo en `/juegos/snake` dentro de un marco CRT y conectarlo al ranking existente (envío de puntuación con alias, Top 10 y `/ranking?juego=snake`).
@@ -124,28 +124,28 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 ## Criterios de aceptación
 
 - [ ] `npx eslint app components lib`, `npx tsc --noEmit`, `npx prettier --check .` y `npm run build` terminan sin errores.
-- [ ] El build lista `/juegos/snake` como ruta (prerenderizado parcial) y los otros tres juegos siguen funcionando igual.
-- [ ] `games` contiene una fila con `slug = 'snake'` y existe su migración en `supabase/migrations/`.
-- [ ] `/juegos/snake` muestra el juego en un marco `.crt` con el título de pestaña "Snake · Arcade Vault".
-- [ ] Al cargar la página la serpiente (3 segmentos, centro, hacia la derecha) y una fruta están visibles, no se mueven y se ve "ESPACIO PARA EMPEZAR". No se puede morir antes de pulsar Espacio.
+- [x] El build lista `/juegos/snake` como ruta (prerenderizado parcial) y los otros tres juegos siguen funcionando igual.
+- [x] `games` contiene una fila con `slug = 'snake'` y existe su migración en `supabase/migrations/`.
+- [x] `/juegos/snake` muestra el juego en un marco `.crt` con el título de pestaña "Snake · Arcade Vault".
+- [x] Al cargar la página la serpiente (3 segmentos, centro, hacia la derecha) y una fruta están visibles, no se mueven y se ve "ESPACIO PARA EMPEZAR". No se puede morir antes de pulsar Espacio.
 - [ ] Las flechas y WASD giran la serpiente; invertir el sentido de golpe se ignora, y dos giros rápidos seguidos (p. ej. arriba y luego izquierda) se ejecutan en pasos consecutivos.
-- [ ] Comer una fruta suma 10 puntos, hace crecer la serpiente 1 segmento y coloca una fruta nueva en una casilla libre (nunca sobre la serpiente).
+- [x] Comer una fruta suma 10 puntos, hace crecer la serpiente 1 segmento y coloca una fruta nueva en una casilla libre (nunca sobre la serpiente).
 - [ ] Cada 5 frutas el paso se acorta 10 ms, sin bajar de 60 ms.
 - [ ] Chocar con una pared o con el propio cuerpo muestra "GAME OVER" con la puntuación; ir a la casilla que deja libre la cola no cuenta como choque.
 - [ ] Llenar el tablero muestra "¡Tablero completo!" y envía la puntuación como una partida terminada.
 - [ ] `P` y `Escape` pausan y reanudan mostrando "PAUSA" en el canvas; en pausa no avanza la serpiente ni se acumula tiempo.
 - [ ] Una partida produce como máximo una fila: `onGameOver` se llama una sola vez, tanto en derrota como en victoria, y no se puede enviar dos veces la misma puntuación; "Omitir" no inserta nada.
 - [ ] Escribir el alias (incluida la barra espaciadora y las flechas) no mueve la serpiente ni reinicia el juego.
-- [ ] Reiniciar con Espacio oculta el formulario y empieza con 3 segmentos, 0 puntos y el paso de 140 ms.
+- [x] Reiniciar con Espacio oculta el formulario y empieza con 3 segmentos, 0 puntos y el paso de 140 ms.
 - [ ] Espacio y las flechas no desplazan la página mientras el juego está en pantalla.
 - [ ] Navegar fuera de `/juegos/snake` y volver no duplica la velocidad del juego ni `onGameOver`.
 - [ ] Mantener una tecla pulsada y cambiar de ventana no deja giros pendientes al volver.
-- [ ] Tras enviar, el Top 10 refleja la puntuación sin recarga manual, y `/ranking?juego=snake` lista el juego respetando el orden (puntuación descendente, más antigua primero).
+- [x] Tras enviar, el Top 10 refleja la puntuación sin recarga manual, y `/ranking?juego=snake` lista el juego respetando el orden (puntuación descendente, más antigua primero).
 - [ ] Con Supabase inalcanzable la página no falla y muestra "Sin puntuaciones todavía".
-- [ ] A 375 px de ancho no hay scroll horizontal y el canvas conserva la proporción 4:3.
-- [ ] Pulsar la tarjeta "SERPIENTE" en `/` y la de `/biblioteca` lleva a `/juegos/snake`.
-- [ ] Sin errores ni warnings de hidratación en la consola, ninguna clave `service_role` en el repositorio y ningún asset cargado desde `references/` (la imagen sale de `public/games/snake/`).
-- [ ] La fruta se ve como pixel art nítido (sin suavizado), entera dentro de su casilla y sin deformarse, y cada fruta nueva puede ser un sprite distinto.
+- [x] A 375 px de ancho no hay scroll horizontal y el canvas conserva la proporción 4:3.
+- [x] Pulsar la tarjeta "SERPIENTE" en `/` y la de `/biblioteca` lleva a `/juegos/snake`.
+- [x] Sin errores ni warnings de hidratación en la consola, ninguna clave `service_role` en el repositorio y ningún asset cargado desde `references/` (la imagen sale de `public/games/snake/`).
+- [x] La fruta se ve como pixel art nítido (sin suavizado), entera dentro de su casilla y sin deformarse, y cada fruta nueva puede ser un sprite distinto.
 - [ ] Navegar fuera antes de que cargue la imagen no deja ningún bucle ni listener activo.
 
 ---
