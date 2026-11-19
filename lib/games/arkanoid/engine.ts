@@ -8,6 +8,10 @@ import {
   BLOCK_W,
   BLOCKS_ORIGIN_X,
   BLOCKS_ORIGIN_Y,
+  TOUGH_COLOR,
+  TOUGH_DAMAGE_SHADE,
+  TOUGH_HITS,
+  TOUGH_SCORE,
   BOUNCE_SOUND_SRC,
   BREAK_SOUND_SRC,
   EXPLOSION_DURATION,
@@ -44,6 +48,7 @@ interface Rect {
 interface Block extends Rect {
   color: BlockColor;
   alive: boolean;
+  hits: number; // golpes que le faltan para romperse
 }
 
 interface Explosion extends Rect {
@@ -130,6 +135,7 @@ export function startArkanoid(
       h: BLOCK_H,
       color: b.color,
       alive: true,
+      hits: b.color === TOUGH_COLOR ? TOUGH_HITS : 1,
     }));
     game.explosions = [];
     initBall();
@@ -208,6 +214,15 @@ export function startArkanoid(
     // Colisión con bloques (uno por fotograma)
     for (const block of game.blocks) {
       if (!block.alive || !collideAABB(ball, block)) continue;
+      block.hits--;
+      ball.vy = -ball.vy;
+      if (block.hits > 0) {
+        // Aguanta: la pelota rebota y se saca del bloque para no contar el
+        // mismo golpe en el fotograma siguiente
+        ball.y = ball.vy < 0 ? block.y - ball.h : block.y + block.h;
+        play(bounceSound);
+        break;
+      }
       block.alive = false;
       game.explosions.push({
         x: block.x,
@@ -217,8 +232,7 @@ export function startArkanoid(
         color: block.color,
         elapsed: 0,
       });
-      game.score += BLOCK_SCORE;
-      ball.vy = -ball.vy;
+      game.score += block.color === TOUGH_COLOR ? TOUGH_SCORE : BLOCK_SCORE;
       play(breakSound);
       if (game.blocks.every((b) => !b.alive)) {
         if (game.level < LAST_LEVEL) loadLevel(game.level + 1);
@@ -276,8 +290,15 @@ export function startArkanoid(
     c.fillStyle = "#000";
     c.fillRect(0, 0, WIDTH, HEIGHT);
 
-    for (const b of g.blocks)
-      if (b.alive) drawFrame(c, img, blockSprite(b.color), b.x, b.y, b.w, b.h);
+    for (const b of g.blocks) {
+      if (!b.alive) continue;
+      drawFrame(c, img, blockSprite(b.color), b.x, b.y, b.w, b.h);
+      // Bloque resistente ya golpeado: se oscurece
+      if (b.color === TOUGH_COLOR && b.hits < TOUGH_HITS) {
+        c.fillStyle = TOUGH_DAMAGE_SHADE;
+        c.fillRect(b.x, b.y, b.w, b.h);
+      }
+    }
 
     for (const e of g.explosions)
       drawFrame(c, img, explosionFrame(e.color, e.elapsed), e.x, e.y, e.w, e.h);

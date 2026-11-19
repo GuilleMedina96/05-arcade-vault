@@ -19,6 +19,13 @@ export const BLOCKS_ORIGIN_X = (WIDTH - BLOCK_COLS * BLOCK_W) / 2;
 export const BLOCKS_ORIGIN_Y = 80;
 
 export const BLOCK_SCORE = 10;
+
+// Los bloques grises son resistentes: aguantan un golpe y se rompen al segundo
+// (regla añadida por la SPEC 08; el original los rompía al primero).
+export const TOUGH_COLOR = "gray";
+export const TOUGH_HITS = 2;
+export const TOUGH_SCORE = 20; // se suma solo al romperlo
+export const TOUGH_DAMAGE_SHADE = "rgba(0, 0, 0, 0.5)"; // bloque ya golpeado
 export const INITIAL_LIVES = 3;
 
 export const EXPLOSION_DURATION = 150; // ms

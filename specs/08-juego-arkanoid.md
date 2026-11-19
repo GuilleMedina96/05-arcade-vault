@@ -24,6 +24,7 @@ La plataforma de puntuaciones ya es genérica por `gameSlug` y la SPEC 07 dejó 
 - Migración `supabase/migrations/<timestamp>_seed_arkanoid.sql` que siembra la fila `arkanoid` en `games`.
 - Port a TypeScript en `lib/games/arkanoid/`: constantes, niveles tipados, spritesheet y motor.
 - Gameplay del original: canvas 800×600, pala, pelota, 5 niveles con velocidad creciente, 3 vidas, 10 puntos por bloque, explosión animada de 4 fotogramas (150 ms) al romper un bloque, rebote en paredes, techo y pala, un bloque por fotograma.
+- **Bloques grises resistentes** (regla nueva, ausente en el original): aguantan un golpe y se rompen al segundo. Tras el primero se dibujan oscurecidos, la pelota rebota con el sonido de rebote y no suman puntos; al romperse explotan y suman 20. Solo existen en el nivel 2 (2 bloques).
 - Control de la pala **solo con las flechas ← →** (400 px/s). El ratón del original se descarta (ver Decisiones).
 - Pausa con `P` o `Escape`, con overlay "PAUSA" dibujado en el canvas.
 - Overlays "GAME OVER" y "¡Completaste el juego!" en el canvas. **Reinicio con Espacio** tras cualquiera de los dos (nivel 1, 3 vidas, 0 puntos).
@@ -38,7 +39,7 @@ La plataforma de puntuaciones ya es genérica por `gameSlug` y la SPEC 07 dejó 
 **Fuera de alcance (para otras specs):**
 
 - El menú "Saltar al nivel" de la pausa (ver Decisiones).
-- Potenciadores, bloques de varios golpes, ángulo de rebote según el punto de impacto en la pala y más niveles.
+- Potenciadores, otros bloques resistentes además de los grises, ángulo de rebote según el punto de impacto en la pala y más niveles.
 - Silenciar, volumen y pausa automática al perder el foco.
 - Controles táctiles y mando.
 - Cambios en `lib/scores.ts`, `LeaderboardPanel`, `/ranking`, `nav`, `submitScore` y el esquema de la base.
@@ -81,6 +82,7 @@ interface Block {
   h: number;
   color: BlockColor;
   alive: boolean;
+  hits: number; // golpes que le faltan; 2 para los grises y 1 para el resto
 }
 
 interface Explosion {
@@ -119,7 +121,7 @@ Convenciones:
 - Constantes copiadas tal cual: `PADDLE_SPEED = 400`, `BLOCK_COLS = 10`, `BLOCK_ROWS = 6`, `BLOCK_W = 64`, `BLOCK_H = 24`, origen de bloques `(80, 80)`, `BASE_BALL_VX = 200`, `BASE_BALL_VY = -300`, velocidades por nivel `[1, 1.10, 1.21, 1.33, 1.46]`, `EXPLOSION_DURATION = 150`, pala `y = 560, h = 14` y pelota 16×16. Los cinco diseños de nivel se portan sin cambios.
 - **El ancho de la pala es 81, no 162.** `game.js` fija `w: 81` aunque el sprite mide 162×14 y el `CLAUDE.md` del original dice 162. Se mantiene 81, porque es el valor con el que se jugó y se balanceó; el sprite se dibuja escalado a 81×14.
 - Unidades: `dt` en **segundos**, como el original, limitado a 0,05 s (ajuste necesario al integrar en una página, equivalente al de la SPEC 05). Las explosiones avanzan en milisegundos (`dt * 1000`).
-- `score` es la puntuación del HUD: 10 por bloque. Los 5 niveles suman 208 bloques, es decir **2 080 puntos como máximo**, muy por debajo del tope de 1 000 000 de la base. No hace falta migrar el `check`.
+- `score` es la puntuación del HUD: 10 por bloque y 20 por cada bloque gris al romperlo. Los 5 niveles suman 208 bloques, 2 de ellos grises, es decir **2 100 puntos como máximo**, muy por debajo del tope de 1 000 000 de la base. No hace falta migrar el `check`.
 - Spritesheet: `lib/games/arkanoid/spritesheet.ts` carga `public/games/arkanoid/spritesheet-breakout.png` dentro del motor, no durante el render. El motor arranca el bucle en `onload`; si la limpieza se ejecuta antes, una bandera `stopped` impide arrancarlo.
 - Sonido: los `Audio` se crean dentro de `startArkanoid` y se reproducen con `cloneNode()`. Un `play()` rechazado por el navegador (sin interacción previa) se ignora sin error.
 - Teclas: `createInput` ya ignora `keydown` con `target` en `input`/`textarea` y vacía las teclas en `blur`. Hay que comprobar que su conjunto de teclas cubre `ArrowLeft`, `ArrowRight`, Espacio, `P` y `Escape`.
@@ -147,7 +149,8 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 - [x] `/juegos/arkanoid` muestra el juego en un marco `.crt` con el título de pestaña "Arkanoid · Arcade Vault".
 - [x] Se ven los 60 bloques del nivel 1 con los sprites del spritesheet, la pala y la pelota.
 - [ ] ← → mueven la pala a 400 px/s sin salirse del canvas, y el ratón no la mueve.
-- [ ] La pelota rebota en paredes, techo y pala; romper un bloque suma 10 puntos, invierte `vy`, reproduce la explosión de 4 fotogramas y rompe como máximo un bloque por fotograma.
+- [ ] Un bloque gris aguanta el primer golpe (rebota la pelota, se oscurece y no suma puntos) y se rompe al segundo con explosión y +20; un solo impacto nunca cuenta dos golpes.
+- [ ] La pelota rebota en paredes, techo y pala; romper un bloque de otro color suma 10 puntos, invierte `vy`, reproduce la explosión de 4 fotogramas y rompe como máximo un bloque por fotograma.
 - [ ] Al romper todos los bloques se carga el nivel siguiente con la pelota más rápida (1,00 / 1,10 / 1,21 / 1,33 / 1,46) y el diseño del original; el HUD muestra el nivel.
 - [x] Dejar caer la pelota resta una vida y la recoloca sobre la pala; con 0 vidas aparece "GAME OVER".
 - [ ] Completar el nivel 5 muestra "¡Completaste el juego!".
@@ -186,7 +189,10 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 - **Sí:** copiar spritesheet y sonidos a `public/games/arkanoid/` y cargarlos en el motor. No se usa `next/image` porque se dibujan en el canvas.
 - **No:** copiar `game.js` a `public/` ni usar un iframe. No hay forma limpia de leer la puntuación.
 - **No:** tocar `lib/scores.ts`, `LeaderboardPanel`, `/ranking`, el nav ni `submitScore`. Ya son genéricos por `gameSlug`.
-- **No:** migrar el `check` de `score`. El máximo posible es 2 080.
+- **Sí:** los bloques grises aguantan dos golpes. Decisión posterior a la aprobación, a petición del usuario: el gris sugería un bloque "plateado" como en el Arkanoid clásico, aunque el original los rompía al primer golpe. **Cambia el comportamiento respecto al original.**
+- **Sí:** el gris se oscurece tras el primer golpe (un velo negro del 50 %, sin sprites nuevos), no puntúa en ese golpe y da 20 al romperse. Se descartó puntuar en cada golpe.
+- **No:** más bloques resistentes ni rediseñar niveles; solo el gris del nivel 2.
+- **No:** migrar el `check` de `score`. El máximo posible es 2 100.
 
 ---
 
@@ -210,7 +216,7 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías de Client Co
 ## Qué **no** está en esta spec
 
 - El menú "Saltar al nivel" de la pausa.
-- Potenciadores, bloques resistentes, ángulos de rebote variables y niveles adicionales.
+- Potenciadores, otros bloques resistentes, ángulos de rebote variables y niveles adicionales.
 - Silenciar, volumen, pausa automática, controles táctiles y mando.
 - Autenticación, mejor puntuación por alias, anti-trampas y paginación.
 - Cambios en el esquema, `lib/scores.ts`, `LeaderboardPanel`, `/ranking`, el nav y `submitScore`.
