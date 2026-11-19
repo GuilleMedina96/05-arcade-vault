@@ -2216,6 +2216,11 @@ a {
   }
 }
 
+.library-grid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  margin-top: 24px;
+}
+
 .mini-card {
   background: var(--bg-2);
   border: 1px solid var(--line);
@@ -3244,7 +3249,8 @@ a {
   color: var(--ink-dim);
 }
 
-.asteroids-canvas {
+.asteroids-canvas,
+.arkanoid-canvas {
   position: absolute;
   inset: 0;
   display: block;
