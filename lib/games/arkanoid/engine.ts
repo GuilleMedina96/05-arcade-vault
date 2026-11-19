@@ -36,7 +36,8 @@ import {
 
 export { HEIGHT, WIDTH };
 
-type GameState = "playing" | "paused" | "gameover" | "win";
+// "ready": la partida espera a que el jugador pulse Espacio para lanzar la pelota
+type GameState = "ready" | "playing" | "paused" | "gameover" | "win";
 
 interface Rect {
   x: number;
@@ -88,7 +89,7 @@ export function startArkanoid(
   let rafId = 0;
   let sheet: HTMLImageElement | null = null;
   let game: Game;
-  createGame();
+  createGame(true);
 
   function play(sound: HTMLAudioElement) {
     // El navegador puede rechazar play() sin interacción previa: se ignora
@@ -97,7 +98,8 @@ export function startArkanoid(
   }
 
   // ── Estado ────────────────────────────────────────────────────────────────
-  function createGame() {
+  /** `waitForStart`: la pelota no sale hasta pulsar Espacio (solo al cargar la página). */
+  function createGame(waitForStart = false) {
     game = {
       paddle: {
         x: (WIDTH - PADDLE_W) / 2,
@@ -111,7 +113,7 @@ export function startArkanoid(
       lives: INITIAL_LIVES,
       score: 0,
       level: 1,
-      state: "playing",
+      state: waitForStart ? "ready" : "playing",
     };
     loadLevel(1);
   }
@@ -164,18 +166,30 @@ export function startArkanoid(
       return;
     }
 
+    const { paddle, ball } = game;
+
+    // Pala (con teclado)
+    const movePaddle = () => {
+      if (input.keys.ArrowLeft)
+        paddle.x = Math.max(0, paddle.x - PADDLE_SPEED * dt);
+      if (input.keys.ArrowRight)
+        paddle.x = Math.min(WIDTH - paddle.w, paddle.x + PADDLE_SPEED * dt);
+    };
+
+    // Esperando el saque: la pelota acompaña a la pala hasta pulsar Espacio
+    if (game.state === "ready") {
+      movePaddle();
+      ball.x = paddle.x + (paddle.w - ball.w) / 2;
+      if (space) game.state = "playing";
+      return;
+    }
+
     if (pause || escape) {
       game.state = game.state === "paused" ? "playing" : "paused";
     }
     if (game.state === "paused") return;
 
-    const { paddle, ball } = game;
-
-    // Pala
-    if (input.keys.ArrowLeft)
-      paddle.x = Math.max(0, paddle.x - PADDLE_SPEED * dt);
-    if (input.keys.ArrowRight)
-      paddle.x = Math.min(WIDTH - paddle.w, paddle.x + PADDLE_SPEED * dt);
+    movePaddle();
 
     // Pelota
     ball.x += ball.vx * dt;
@@ -314,7 +328,7 @@ export function startArkanoid(
     );
     drawFrame(c, img, BALL_SPRITE, g.ball.x, g.ball.y, g.ball.w, g.ball.h);
 
-    if (g.state === "playing" || g.state === "paused") {
+    if (g.state !== "gameover" && g.state !== "win") {
       c.fillStyle = "#fff";
       c.font = "bold 18px monospace";
       c.textAlign = "left";
@@ -330,7 +344,17 @@ export function startArkanoid(
     }
 
     const points = g.score.toLocaleString("es-ES");
-    if (g.state === "paused")
+    if (g.state === "ready") {
+      // Sin velo: se ve el tablero y la pelota sobre la pala
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+      c.fillStyle = "#fff";
+      c.font = "bold 30px monospace";
+      c.fillText("ESPACIO PARA EMPEZAR", WIDTH / 2, 400);
+      c.fillStyle = "rgba(255,255,255,0.7)";
+      c.font = "bold 16px monospace";
+      c.fillText("← → MOVER LA PALA · P PAUSA", WIDTH / 2, 440);
+    } else if (g.state === "paused")
       drawOverlay(c, "PAUSA", 56, "P O ESC PARA CONTINUAR");
     else if (g.state === "gameover")
       drawOverlay(
